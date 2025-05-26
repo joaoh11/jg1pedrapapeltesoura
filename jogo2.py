@@ -70,5 +70,4 @@ class PedraPapelTesoura:
         self.window.blit(self.rock_img_action, (137, 750))
         self.window.blit(self.paper_img_action, (326, 750))
         self.window.blit(self.scissors_img_action, (512, 750))
-
-    
+        
