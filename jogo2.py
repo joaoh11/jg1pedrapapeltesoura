@@ -70,4 +70,113 @@ class PedraPapelTesoura:
         self.window.blit(self.rock_img_action, (137, 750))
         self.window.blit(self.paper_img_action, (326, 750))
         self.window.blit(self.scissors_img_action, (512, 750))
-        
+
+    def random_action(self):
+        action = random.randint(0, 2)
+        self.adversary_action = self.actions[action]
+
+    def adversary_selected_play(self):
+        if self.adversary_action == 'rock':
+            self.window.blit(self.rock_img, (225, 50))
+        elif self.adversary_action == 'paper':
+            self.window.blit(self.paper_img, (225, 50))
+        elif self.adversary_action == 'scissors':
+            self.window.blit(self.scissors_img, (225, 50))
+
+    def selected_play(self):
+        if self.action == 'rock':
+            self.window.blit(self.rock_img, (225, 400))
+        elif self.action == 'paper':
+            self.window.blit(self.paper_img, (225, 400))
+        elif self.action == 'scissors':
+            self.window.blit(self.scissors_img, (225, 400))
+
+    def actions_buttons(self, mouse):
+        if mouse[0][0] >= 127 and mouse[0][0] <= 247 and mouse[0][1] >= 740 and mouse[0][1] <= 860:
+            pg.draw.rect(self.window, self.black, (127, 740, 120, 120))
+            if mouse[2][0] == True:
+                self.random_action()
+                self.action = 'rock'
+        if mouse[0][0] >= 316 and mouse[0][0] <= 436 and mouse[0][1] >= 740 and mouse[0][1] <= 860:
+            pg.draw.rect(self.window, self.black, (316, 740, 120, 120))
+            if mouse[2][0] == True:
+                self.random_action()
+                self.action = 'paper'
+        if mouse[0][0] >= 502 and mouse[0][0] <= 622 and mouse[0][1] >= 740 and mouse[0][1] <= 860:
+            pg.draw.rect(self.window, self.black, (502, 740, 120, 120))
+            if mouse[2][0] == True:
+                self.random_action()
+                self.action = 'scissors'
+
+    def match_result_text(self, is_victory, result):
+        if is_victory != None:
+            if is_victory:
+                victory_text = self.font_2.render('Você ganhou!', 1, self.black)
+            else:
+                victory_text = self.font_2.render('Você perdeu', 1, self.black)
+
+            result_text = self.font_2.render(result, 1, self.black)
+
+            blit_victory_x = (self.window.get_width() / 2) - (victory_text.get_width() / 2)
+            blit_victory_y = (self.window.get_height() / 2) - victory_text.get_height() - 100
+            blit_result_x = (self.window.get_width() / 2) - (result_text.get_width() / 2)
+            blit_result_y = (self.window.get_height() / 2) + result_text.get_height() - 100
+
+            self.window.blit(victory_text, (blit_victory_x, blit_victory_y))
+            self.window.blit(result_text, (blit_result_x, blit_result_y))
+        else:
+            result_text = self.font_2.render('Empate!', 1, self.black)
+
+            blit_result_x = (self.window.get_width() / 2) - (result_text.get_width() / 2)
+            blit_result_y = (self.window.get_height() / 2) + (result_text.get_height() / 2) - 120
+
+            self.window.blit(result_text, (blit_result_x, blit_result_y))
+
+    def match_result(self):
+        if self.adversary_action == 'scissors' and self.action == 'paper':
+            self.match_result_text(False, 'Tesoura corta o papel')
+        elif self.adversary_action == 'paper' and self.action == 'scissors':
+            self.match_result_text(True, 'Tesoura corta o papel')
+        elif self.adversary_action == 'paper' and self.action == 'rock':
+            self.match_result_text(False, 'Papel cobre a pedra')
+        elif self.adversary_action == 'rock' and self.action == 'paper':
+            self.match_result_text(True, 'Papel cobre a pedra')
+        elif self.adversary_action == 'rock' and self.action == 'scissors':
+            self.match_result_text(False, 'Pedra amassa a tesoura')
+        elif self.adversary_action == 'scissors' and self.action == 'rock':
+            self.match_result_text(True, 'Pedra amassa a tesoura')
+        elif self.adversary_action == self.action and self.action != None:
+            self.match_result_text(None, '')
+
+
+ppt = PedraPapelTesoura()
+
+
+while True:
+    for event in pg.event.get():
+        if event.type == pg.QUIT:
+            pg.quit()
+            quit()
+        if event.type == pg.KEYDOWN:
+            if pg.key.name(event.key) == 'escape':
+                pg.quit()
+                quit()
+
+    # Mouse info
+    mouse_position  = pg.mouse.get_pos()
+    mouse_input = pg.mouse.get_pressed()
+    mouse_click = ppt.mouse_has_clicked(mouse_input)
+    mouse = (mouse_position, mouse_input, mouse_click)
+
+    # Game
+    ppt.clock.tick(60)
+    ppt.clear_window()
+    ppt.actions_buttons(mouse)
+    ppt.board()
+    ppt.adversary_selected_play()
+    ppt.selected_play()
+    ppt.match_result()
+
+    ppt.last_click_status = mouse_input
+
+    pg.display.update()
