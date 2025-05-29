@@ -1,7 +1,8 @@
 import pygame as pg
 import random
-
-
+pg.mixer.init()
+pg.mixer.music.load('musica.ogg')
+pg.mixer.music.play(-1)  
 class PedraPapelTesoura:
     def __init__(self):
         self.white = (255, 255, 255)
@@ -15,22 +16,18 @@ class PedraPapelTesoura:
 
         self.clock = pg.time.Clock()
 
-        # Mouse variables
         self.last_click_status = (False, False, False)
 
         self.actions = ['rock', 'paper', 'scissors']
         self.action = None
         self.adversary_action = None
 
-        # Rock
         self.rock_jpg = pg.image.load('./rock.png')
         self.rock_img = pg.transform.scale(self.rock_jpg, (300, 300))
         self.rock_img_action = pg.transform.scale(self.rock_jpg, (100, 100))
-        # Paper
         self.paper_jpg = pg.image.load('./paper.png')
         self.paper_img = pg.transform.scale(self.paper_jpg, (300, 300))
         self.paper_img_action = pg.transform.scale(self.paper_jpg, (100, 100))
-        # Scissors
         self.scissors_jpg = pg.image.load('./scissors.png')
         self.scissors_img = pg.transform.scale(self.scissors_jpg, (300, 300))
         self.scissors_img_action = pg.transform.scale(self.scissors_jpg, (100, 100))
@@ -67,7 +64,6 @@ class PedraPapelTesoura:
         blit_y = 550 - (question_text.get_height() / 2)
         self.window.blit(question_text, (blit_x, blit_y))
         
-        # Destaque com borda preta ao redor das imagens menores
         pg.draw.rect(self.window, self.black, (137 - 5, 750 - 5, 100 + 10, 100 + 10), 5)
         pg.draw.rect(self.window, self.black, (326 - 5, 750 - 5, 100 + 10, 100 + 10), 5)
         pg.draw.rect(self.window, self.black, (512 - 5, 750 - 5, 100 + 10, 100 + 10), 5)
@@ -168,13 +164,11 @@ while True:
                 pg.quit()
                 quit()
 
-    # Mouse info
     mouse_position  = pg.mouse.get_pos()
     mouse_input = pg.mouse.get_pressed()
     mouse_click = ppt.mouse_has_clicked(mouse_input)
     mouse = (mouse_position, mouse_input, mouse_click)
 
-    # Game
     ppt.clock.tick(60)
     ppt.clear_window()
     ppt.actions_buttons(mouse)
