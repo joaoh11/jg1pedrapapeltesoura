@@ -66,11 +66,17 @@ class PedraPapelTesoura:
         blit_x = (self.window.get_width() / 2) - (question_text.get_width() / 2)
         blit_y = 550 - (question_text.get_height() / 2)
         self.window.blit(question_text, (blit_x, blit_y))
+        
+        # Destaque com borda preta ao redor das imagens menores
+        pg.draw.rect(self.window, self.black, (137 - 5, 750 - 5, 100 + 10, 100 + 10), 5)
+        pg.draw.rect(self.window, self.black, (326 - 5, 750 - 5, 100 + 10, 100 + 10), 5)
+        pg.draw.rect(self.window, self.black, (512 - 5, 750 - 5, 100 + 10, 100 + 10), 5)
 
         self.window.blit(self.rock_img_action, (137, 750))
         self.window.blit(self.paper_img_action, (326, 750))
         self.window.blit(self.scissors_img_action, (512, 750))
-
+ 
+       
     def random_action(self):
         action = random.randint(0, 2)
         self.adversary_action = self.actions[action]
